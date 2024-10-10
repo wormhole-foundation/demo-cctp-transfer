@@ -15,6 +15,7 @@ import { getSigner } from './helpers/helpers';
 
 	const amt = 1_000_001n;
 
+	// If set to false the user will have to manually approve the transfer (refer to the circle-manual-transfer.ts file)
 	const automatic = true;
 
 	const nativeGas = automatic ? amount.units(amount.parse('0.0', 6)) : 0n;
