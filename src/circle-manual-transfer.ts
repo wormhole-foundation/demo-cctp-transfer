@@ -33,12 +33,12 @@ import { getSigner } from './helpers/helpers';
 	console.log(`Started Transfer: `, srcTxids);
 
 	// Step 2: Wait for Circle Attestation (VAA)
-	const timeout = 60 * 1000; // Timeout in milliseconds (60 seconds)
+	const timeout = 120 * 1000; // Timeout in milliseconds (120 seconds)
 	console.log('Waiting for Attestation');
 	const attestIds = await xfer.fetchAttestation(timeout);
 	console.log(`Got Attestation: `, attestIds);
 
-	// Step 3: Complete the transfer on the destination chain (Celo)
+	// Step 3: Complete the transfer on the destination chain (Sepolia)
 	console.log('Completing Transfer');
 	const dstTxids = await xfer.completeTransfer(destination.signer);
 	console.log(`Completed Transfer: `, dstTxids);
