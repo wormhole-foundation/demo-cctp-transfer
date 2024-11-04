@@ -18,7 +18,7 @@ Create a `.env` file at the root of the project with your private keys:
 
 ```bash
 ETH_PRIVATE_KEY="INSERT_PRIVATE_KEY"
-SOL_PRIVATE_KEY="INSERT_PRIVATE_KEY"
+SOL_PRIVATE_KEY="INSERT_PRIVATE_KEY" // must be base58 not a byte array!
 ```
 
 ## Installation
