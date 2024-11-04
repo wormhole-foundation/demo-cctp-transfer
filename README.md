@@ -26,8 +26,8 @@ SOL_PRIVATE_KEY="INSERT_PRIVATE_KEY" // must be base58 not a byte array!
 1. Clone the repository and navigate to the project directory:
 
 ```bash
-git clone https://github.com/martin0995/cctp-transfers.git
-cd cctp-cross-chain-transfer
+git clone https://github.com/wormhole-foundation/demo-cctp-transfer.git
+cd demo-cctp-transfer
 ```
 
 2. Install the project dependencies:
