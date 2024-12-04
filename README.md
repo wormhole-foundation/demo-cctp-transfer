@@ -6,6 +6,8 @@ This project demonstrates how to perform cross-chain transfers using Circle's CC
  - **Automatic transfer** – fully automated transfer where steps are executed in one command
  - **Partial manual transfer** – completing a transfer from a given transaction ID (in case of an interrupted or incomplete transfer)
 
+For a complete tutorial on performing cross-chain transfers using CCTP from scratch, please take a look at the [Wormhole CCTP Tutorial](https://wormhole.com/docs/tutorials/messaging/cctp/).
+
 ## Prerequisites
 
 Before you begin, ensure you have the following:
