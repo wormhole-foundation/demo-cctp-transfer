@@ -1,0 +1,123 @@
+name: Canary – Latest Wormhole SDK
+
+on:
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '0 6 * * 1' # Runs every Monday at 06:00 UTC
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  typecheck-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies (locked versions)
+        run: npm ci
+
+      - name: Override Wormhole SDK to @latest (no lockfile changes)
+        run: |
+          npm install --no-save @wormhole-foundation/sdk@latest
+          npm ls @wormhole-foundation/sdk --depth=0
+
+      - name: Type check against latest SDK
+        id: typecheck
+        run: |
+          set -o pipefail
+          npm run typecheck 2>&1 | tee typecheck.log
+          exit_code=${PIPESTATUS[0]}
+          tail -n 200 typecheck.log > typecheck.tail.log || true
+          printf 'exit_code=%s\n' "$exit_code" >> "$GITHUB_OUTPUT"
+          log="$(cat typecheck.tail.log 2>/dev/null || true)"
+          printf 'log<<EOF\n%s\nEOF\n' "$log" >> "$GITHUB_OUTPUT"
+          printf 'failed=%s\n' "$( [ "$exit_code" -ne 0 ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Open issue if typecheck fails (scheduled run)
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            try {
+              const { repo, owner } = context.repo;
+              const fs = require('fs');
+              const path = require('path');
+              const title = "Demo fails typecheck with latest Wormhole SDK";
+              const exitCodeRaw = '${{ steps.typecheck.outputs.exit_code }}';
+              const parsedExitCode = Number.parseInt(exitCodeRaw, 10);
+              const exitCode = Number.isNaN(parsedExitCode) ? exitCodeRaw : parsedExitCode;
+              const workspace = process.env.GITHUB_WORKSPACE || process.cwd();
+              const logPath = path.join(workspace, 'typecheck.log');
+              let log = '(no output captured)';
+              try {
+                const rawLog = fs.readFileSync(logPath, 'utf8');
+                const lines = rawLog.split(/\r?\n/);
+                const snippet = lines.slice(-200).join('\n').trim();
+                if (snippet.length > 0) {
+                  const maxChars = 6000;
+                  log = snippet.length > maxChars ? snippet.slice(-maxChars) : snippet;
+                }
+                const errorRegex = /^(?<file>[^:]+):(?<line>\d+):\d+\s+-\s+error\s+[A-Z]+\d+:\s+(?<message>.+)$/;
+                const matches = lines
+                  .map((line) => line.trim())
+                  .map((line) => line.match(errorRegex))
+                  .filter(Boolean)
+                  .map((match) => ({
+                    file: match.groups.file,
+                    line: match.groups.line,
+                    message: match.groups.message
+                  }));
+                if (matches.length > 0) {
+                  const heading = matches.length === 1 ? '1 error' : `${matches.length} errors`;
+                  const detailLines = matches
+                    .slice(0, 5)
+                    .flatMap(({ file, line, message }) => [
+                      `typecheck-latest: ${file}#L${line}`,
+                      message
+                    ]);
+                }
+              } catch (readError) {
+                core.warning(`Unable to read typecheck output: ${readError.message}`);
+              }
+              const body = [
+                '**What happened**',
+                'The scheduled canary workflow detected a typecheck or build failure when testing with the latest version of `@wormhole-foundation/sdk`.',
+                '',
+                `**Commit:** ${context.sha}`,
+                '',
+                '**TypeScript errors:**',
+                '```',
+                log,
+                '```',
+                '_This issue was created automatically by the Canary CI job._'
+              ].join('\n');
+
+              const { data: issue } = await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body
+              });
+              core.notice(`Opened issue ${issue.html_url}`);
+            } catch (error) {
+              core.setFailed(`Issue automation failed: ${error instanceof Error ? error.message : String(error)}`);
+            }
+
+      - name: Fail job when typecheck fails
+        if: failure()
+        run: exit 1
