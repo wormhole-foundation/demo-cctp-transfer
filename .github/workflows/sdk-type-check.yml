@@ -1,4 +1,4 @@
-name: Wormhole - SDK Type Check
+name: SDK Type Check
 
 on:
   pull_request:
