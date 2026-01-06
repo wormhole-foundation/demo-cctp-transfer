@@ -16,7 +16,7 @@
 	"license": "ISC",
 	"description": "",
 	"dependencies": {
-		"@wormhole-foundation/sdk": "^3.11.0",
+		"@wormhole-foundation/sdk": "^4.7.2",
 		"dotenv": "^17.2.3"
 	},
 	"devDependencies": {
