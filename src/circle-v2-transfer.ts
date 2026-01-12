@@ -2,8 +2,8 @@ import { Wormhole, circle, routes } from '@wormhole-foundation/sdk';
 import evm from '@wormhole-foundation/sdk/platforms/evm';
 import solana from '@wormhole-foundation/sdk/platforms/solana';
 import '@wormhole-labs/cctp-executor-route';
-import { cctpExecutorRoute } from '@wormhole-labs/cctp-executor-route';
-import type { CCTPExecutorRoute } from '@wormhole-labs/cctp-executor-route/dist/esm/routes/cctpV1';
+import { cctpV2StandardExecutorRoute } from '@wormhole-labs/cctp-executor-route';
+import type { CCTPv2ExecutorRoute } from '@wormhole-labs/cctp-executor-route/dist/esm/routes/cctpV2Base';
 import { getSigner } from './helpers/helpers';
 
 (async function () {
@@ -37,8 +37,8 @@ import { getSigner } from './helpers/helpers';
 		recipient: destination.address,
 	});
 
-	// Configure the executor route (swap to v2 route if your destination uses it)
-  	const ExecutorRoute = cctpExecutorRoute({ referrerFeeDbps: 0n });
+	// Configure the executor route 
+  	const ExecutorRoute = cctpV2StandardExecutorRoute({ referrerFeeDbps: 0n });
   	const route = new ExecutorRoute(wh);
 
 	// Define the amount of USDC to transfer
@@ -58,7 +58,7 @@ import { getSigner } from './helpers/helpers';
 		throw new Error(`Validation failed: ${error.message}`);
 	}
 
-	const validatedParams = validated.params as CCTPExecutorRoute.ValidatedParams;
+	const validatedParams = validated.params as CCTPv2ExecutorRoute.ValidatedParams;
 	const quote = await route.quote(tr, validatedParams);
 	if (!quote.success) {
 		const { error } = quote as Extract<typeof quote, { success: false }>;

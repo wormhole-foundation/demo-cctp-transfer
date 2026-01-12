@@ -1,10 +1,15 @@
 # Demo CCTP Transfers
 
-This project demonstrates how to perform cross-chain transfers using Circle's CCTP (Cross-Chain Transfer Protocol) and the **Wormhole SDK**. The tutorial covers three main scenarios for transferring assets between different blockchains:
+This project demonstrates how to perform cross-chain transfers using Circle's CCTP (Cross-Chain Transfer Protocol) and the **Wormhole SDK**. 
 
- - **Manual transfer** – step-by-step transfer where each phase of the process is manually handled
- - **Automatic transfer** – fully automated transfer where steps are executed in one command
- - **Partial manual transfer** – completing a transfer from a given transaction ID (in case of an interrupted or incomplete transfer)
+The tutorial covers the **Executor routes**, which provide an automatic flow: the source transaction initiates the transfer, and a relay provider completes attestation retrieval and redemption on the destination chain.
+
+Two variants are provided:
+
+- **CCTP v1 Executor route** (`circle:executor:v1`)
+- **CCTP v2 Executor route** (`circle:executor:v2`)
+
+Which one to run depends on the source/destination configuration.
 
 For a complete tutorial on performing cross-chain transfers using CCTP from scratch, please take a look at the [Wormhole CCTP Tutorial](https://wormhole.com/docs/tutorials/messaging/cctp/).
 
@@ -40,48 +45,44 @@ npm install
 
 ## Running Transfers
 
-### Manual Transfer
+This project demonstrates how to execute native USDC transfers using Circle’s CCTP via the Wormhole Executor framework. Transfers are initiated on the source chain and automatically completed on the destination chain by a relay provider.
 
-In a manual transfer, each step is controlled explicitly, allowing you to initiate the transfer, wait for Circle attestation, and complete the process.
+Two Executor routes are provided, depending on the CCTP version supported by the destination chain.
+
+### CCTP v1
+
+This script performs a native USDC transfer using the CCTP v1 Executor route. It initiates the transfer on the source chain and relies on a relay provider to handle attestation retrieval and redemption on the destination chain.
 
 ```bash
-npm run circle:manual
+npm run circle:executor:v1
 ```
 
 Process:
 
- - The script initiates the transfer from the source chain (e.g., Avalanche)
- - Waits for Circle attestation
- - Completes the transfer on the destination chain (e.g., Sepolia)
+ - Initiates a CCTP USDC burn on the source chain
+ - Emits a Wormhole message used for execution
+ - Requests execution through the CCTP v1 Executor route
+ - A relay provider completes attestation retrieval and redemption on the destination chain
 
-### Automatic Transfer
+### CCTP v2
 
-The automatic transfer performs the entire process in a single execution. It automatically handles both initiation and completion of the transfer, including managing gas payments.
+This script performs the same flow using the CCTP v2 standard Executor route.  
 
 ```bash
-npm run circle:auto
+npm run circle:executor:v2
 ```
 
 Process:
 
- - The transfer is executed between the source chain (e.g., Avalanche) and the destination chain (e.g., Sepolia)
- - Gas fees can be managed automatically if set to true
-
-### Partial Transfer
-
-This script is useful if the transfer process is interrupted or if you need to resume a transfer using a transaction ID (`txid`). Please update the `txid` in the script before running.
-
-```bash
-npm run circle:partial
-```
-
-Process:
-
- - Rebuilds a transfer from a specific transaction ID
- - Completes the transfer using the transaction state
+ - Initiates a CCTP v2 USDC burn on the source chain
+ - Emits a Wormhole message containing transfer metadata
+ - Requests execution through the CCTP v2 Executor route
+ - A relay provider redeems USDC and completes the transfer on the destination chain
 
 ## Conclusion
 
-This tutorial covers basic usage of the Wormhole SDK to transfer assets across different blockchains using Circle's CCTP. Each of the provided scripts illustrates a different approach to handling transfers, allowing for flexibility depending on your use case.
+This repository demonstrates how to perform native USDC transfers using Circle’s CCTP through the Wormhole Executor framework. Transfers are initiated on the source chain and completed automatically by relay providers, without requiring applications to manage attestations or destination-chain redemption.
+
+Both CCTP v1 and CCTP v2 Executor routes are included to support different source/destination configurations. The overall execution flow is the same; only the route selection differs.
 
 For more information, refer to the official [Wormhole documentation](https://wormhole.com/docs/learn/messaging/cctp/).

@@ -5,9 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"circle:executor:v1": "npx tsx src/circle-auto-transfer-v1.ts",
-		"circle:executor:v2": "npx tsx src/circle-auto-transfer-v2.ts",
-		"transfer": "npx tsx src/transfer.ts",
+		"circle:executor:v1": "npx tsx src/circle-v1-transfer.ts",
+		"circle:executor:v2": "npx tsx src/circle-v2-transfer.ts",
 		"typecheck": "tsc --noEmit"
 	},
 	"keywords": [],
