@@ -4,6 +4,7 @@ import solana from '@wormhole-foundation/sdk/platforms/solana';
 import '@wormhole-labs/cctp-executor-route';
 import { cctpExecutorRoute } from '@wormhole-labs/cctp-executor-route';
 import type { CCTPExecutorRoute } from '@wormhole-labs/cctp-executor-route/dist/esm/routes/cctpV1';
+import "dotenv/config";
 import { getSigner } from './helpers/helpers';
 
 (async function () {

@@ -36,7 +36,7 @@ export async function getSigner<N extends Network, C extends Chain>(
 			signer = await (await solana()).getSigner(await chain.getRpc(), getEnv('SOL_PRIVATE_KEY'));
 			break;
 		case 'Evm':
-			signer = await (await evm()).getSigner(await chain.getRpc(), getEnv('ETH_PRIVATE_KEY'));
+			signer = await (await evm()).getSigner(await chain.getRpc(), getEnv('EVM_PRIVATE_KEY'));
 			break;
 		default:
 			throw new Error('Unsupported platform: ' + platform);
