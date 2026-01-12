@@ -1,7 +1,11 @@
+import "@wormhole-foundation/sdk-evm-cctp";
+import "@wormhole-foundation/sdk-solana-cctp";
+import "@wormhole-labs/cctp-executor-route";
+
 import { Wormhole, circle, routes } from '@wormhole-foundation/sdk';
 import evm from '@wormhole-foundation/sdk/platforms/evm';
 import solana from '@wormhole-foundation/sdk/platforms/solana';
-import '@wormhole-labs/cctp-executor-route';
+
 import { cctpExecutorRoute } from '@wormhole-labs/cctp-executor-route';
 import type { CCTPExecutorRoute } from '@wormhole-labs/cctp-executor-route/dist/esm/routes/cctpV1';
 import "dotenv/config";
