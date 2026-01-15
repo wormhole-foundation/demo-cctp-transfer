@@ -1,26 +1,45 @@
 {
-	"name": "cctp-cross-chain-transfer",
-	"version": "1.0.0",
-	"type": "module",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"circle:manual": "npx tsx src/circle-manual-transfer.ts",
-		"circle:auto": "npx tsx src/circle-auto-transfer.ts",
-		"circle:partial": "npx tsx src/partial-manual-transfer.ts",
-		"transfer": "npx tsx src/transfer.ts",
+  "name": "demo-cctp-transfer",
+  "version": "1.0.0",
+  "description": "This project demonstrates how to perform cross-chain transfers using Circle's CCTP (Cross-Chain Transfer Protocol) and the **Wormhole SDK**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "circle:executor:v1": "npx tsx src/circle-v1-transfer.ts",
+		"circle:executor:v2": "npx tsx src/circle-v2-transfer.ts",
 		"typecheck": "tsc --noEmit"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"description": "",
-	"dependencies": {
-		"@wormhole-foundation/sdk": "^3.11.0",
-		"dotenv": "^17.2.3"
-	},
-	"devDependencies": {
-		"tsx": "^4.19.0",
-		"typescript": "^5.9.3"
-	}
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wormhole-foundation/demo-cctp-transfer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wormhole-foundation/demo-cctp-transfer/issues"
+  },
+  "homepage": "https://github.com/wormhole-foundation/demo-cctp-transfer#readme",
+  "overrides": {
+    "@wormhole-foundation/sdk-aptos": "4.0.2",
+    "@wormhole-foundation/sdk-base": "4.0.2",
+    "@wormhole-foundation/sdk-connect": "4.0.2",
+    "@wormhole-foundation/sdk-definitions": "4.0.2",
+    "@wormhole-foundation/sdk-evm": "4.0.2",
+    "@wormhole-foundation/sdk-solana": "4.0.2",
+    "@wormhole-foundation/sdk-solana-cctp": "4.0.2",
+    "@wormhole-foundation/sdk-sui": "4.0.2",
+    "@wormhole-foundation/sdk-sui-cctp": "4.0.2",
+    "axios": "1.11.0",
+    "ethers": "6.15.0"
+  },
+  "dependencies": {
+    "@wormhole-foundation/sdk": "^4.7.3",
+    "@wormhole-labs/cctp-executor-route": "^0.25.0",
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
 }
