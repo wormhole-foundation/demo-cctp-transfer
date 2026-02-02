@@ -34,7 +34,7 @@
     "ethers": "6.15.0"
   },
   "dependencies": {
-    "@wormhole-foundation/sdk": "^4.7.4",
+    "@wormhole-foundation/sdk": "^4.9.1",
     "@wormhole-labs/cctp-executor-route": "^0.25.0",
     "dotenv": "^17.2.3"
   },
