@@ -14,5 +14,4 @@ permissions:
 
 jobs:
   typecheck-latest:
-    uses: wormhole-foundation/workflows/.github/workflows/wormhole-demo-typecheck.yml@main
-    secrets: inherit
+    uses: wormhole-foundation/workflows/.github/workflows/wormhole-demo-typecheck.yml@30ad77bad7253e603b820f3037045fa0590e4151 # main
